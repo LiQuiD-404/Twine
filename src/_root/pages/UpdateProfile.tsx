@@ -52,7 +52,7 @@ const UpdateProfile = () => {
     const updatedUser = await updateUser({
       userId: currentUser.$id,
       name: value.name,
-      bio: value.bio,
+      bio: currentUser.bio,
       file: value.file,
       imageUrl: currentUser.imageUrl,
       imageId: currentUser.imageId,
