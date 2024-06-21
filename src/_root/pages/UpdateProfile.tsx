@@ -31,7 +31,7 @@ const UpdateProfile = () => {
       name: user.name,
       username: user.username,
       email: user.email,
-      bio: user.bio || "",
+      bio: user.bio,
     },
   });
 
@@ -47,12 +47,14 @@ const UpdateProfile = () => {
       </div>
     );
 
+  console.log(currentUser.bio);
+
   // Handler
   const handleUpdate = async (value: z.infer<typeof ProfileValidation>) => {
     const updatedUser = await updateUser({
       userId: currentUser.$id,
       name: value.name,
-      bio: currentUser.bio,
+      bio: value.bio ?? "",
       file: value.file,
       imageUrl: currentUser.imageUrl,
       imageId: currentUser.imageId,

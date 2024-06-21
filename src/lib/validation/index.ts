@@ -16,7 +16,7 @@ export const SigninValidation = z.object({
 });
 
 export const ProfileValidation = z.object({
-  file: z.custom<File[]>().refine(files => files.length > 0, { message: "At least one file is required." }),
+  file: z.custom<File[]>().refine(files => files.length >= 0, { message: "At least one file is required." }),
   name: z.string().min(2, { message: "Name must be at least 2 characters long." }),
   username: z.string().min(2, { message: "Username must be at least 2 characters long." }),
   email: z.string().email({ message: "Invalid email address." }),
