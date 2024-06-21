@@ -65,7 +65,7 @@ const Profile = () => {
               </p>
             </div>
 
-            <p className="small-medium md:base-medium text-center xl:text-left mt-5 max-w-screen-sm">
+            <p className="small-medium text-gray-300 md:base-medium text-center xl:text-left mt-5 max-w-screen-sm">
               {currentUser.bio || "Bio not available"}
             </p>
 
