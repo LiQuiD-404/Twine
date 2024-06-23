@@ -1,16 +1,25 @@
+// AllUsers.tsx
+
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 import { Loader, UserCard } from "@/components/shared";
+import { useUserContext } from "@/context/AuthContext";
 import { useGetUsers } from "@/lib/react-query/queries";
 
 const AllUsers = () => {
   const { toast } = useToast();
-
+  const { user } = useUserContext(); // Access global user state
   const { data: creators, isLoading, isError: isErrorCreators } = useGetUsers();
+  const [key, setKey] = useState(0); // State to force re-render
+
+  useEffect(() => {
+    // Force re-render whenever 'user' changes
+    setKey((prevKey) => prevKey + 1);
+  }, [user]); // Include 'user' in dependencies
 
   if (isErrorCreators) {
     toast({ title: "Something went wrong." });
-
-    return;
+    return null; // or return an error message
   }
 
   return (
@@ -29,10 +38,10 @@ const AllUsers = () => {
         {isLoading && !creators ? (
           <Loader />
         ) : (
-          <ul className="user-grid">
+          <ul className="user-grid" key={key}> {/* Use key prop to force re-render */}
             {creators?.documents.map((creator) => (
-              <li key={creator?.$id} className="flex-1 min-w-[200px] w-full  ">
-                <UserCard user={creator} />
+              <li key={creator?.$id} className="flex-1 min-w-[200px] w-full">
+                <UserCard key={creator?.$id} user={creator} />
               </li>
             ))}
           </ul>

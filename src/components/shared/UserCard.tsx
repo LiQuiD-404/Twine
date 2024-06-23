@@ -1,13 +1,30 @@
+// UserCard.tsx
+
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
-
-import { Button } from "../ui/button";
+import { useUserContext } from "@/context/AuthContext";
+import { Button } from "../ui";
 
 type UserCardProps = {
   user: Models.Document;
 };
 
 const UserCard = ({ user }: UserCardProps) => {
+  const { user: currentUser } = useUserContext();
+
+  const isFollowing = currentUser?.following?.includes(user.$id);
+  const isOwnProfile = currentUser.id === user.$id;
+
+  const handleFollowClick = async () => {
+    try {
+      // Implement follow/unfollow logic here
+      // Example: Toggle follow state
+      // This part should update the currentUser context or trigger a refresh if applicable
+    } catch (error) {
+      console.error("Error following/unfollowing user:", error);
+    }
+  };
+
   return (
     <Link to={`/profile/${user.$id}`} className="user-card">
       <img
@@ -25,9 +42,28 @@ const UserCard = ({ user }: UserCardProps) => {
         </p>
       </div>
 
-      <Button type="button" size="sm" className="shad-button_primary px-5">
-        Follow
-      </Button>
+      {!isOwnProfile && (
+        <div className="text-center">
+          <Button
+            type="button"
+            className="shad-button_primary px-8"
+            onClick={handleFollowClick}
+          >
+            {isFollowing ? "Following" : "Follow"}
+          </Button>
+        </div>
+      )}
+
+      {isOwnProfile && (
+        <div className="text-center">
+          <Button
+            type="button"
+            className="shad-button_primary px-8"
+          >
+            Your Profile
+          </Button>
+        </div>
+      )}
     </Link>
   );
 };

@@ -2,7 +2,7 @@ import { ID, Query } from "appwrite";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
-import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
+import { IUpdatePost, INewPost, INewUser, IUpdateUser, IUpdateUserFollowers, IUser } from "@/types";
 
 // ============================================================
 // AUTH
@@ -28,6 +28,8 @@ export async function createUserAccount(user: INewUser) {
       email: newAccount.email,
       username: user.username,
       imageUrl: avatarUrl,
+      followers: [],
+      following: [],
     });
 
     return newUser;
@@ -45,6 +47,8 @@ export async function saveUserToDB(user: {
   name: string;
   imageUrl: URL;
   username?: string;
+  followers: string[];
+  following: string[];
 }) {
   try {
     const newUser = await databases.createDocument(
@@ -548,5 +552,148 @@ export async function updateUser(user: IUpdateUser) {
     return updatedUser;
   } catch (error) {
     console.log(error);
+  }
+}
+
+// export async function addFollower({ userId, followerId }: IUpdateUserFollowers): Promise<void> {
+//   try {
+//     // Fetch the current user document
+//     console.log(userId);
+//     console.log(followerId);
+//     const userDoc = await databases.getDocument(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.userCollectionId,
+//       userId
+//     );
+
+//     console.log(userDoc)
+
+//     // Update the followers array
+//     const updatedFollowers = userDoc.data.followers || [];
+//     if (!updatedFollowers.includes(followerId)) {
+//       updatedFollowers.push(followerId);
+//     }
+
+//     // Update the user document
+//     await databases.updateDocument(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.userCollectionId,
+//       userId, // Document ID
+//       { followers: updatedFollowers }
+//     );
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error(`Failed to add follower: ${error}`);
+//   }
+// }
+
+interface IUserDocument {
+  id: string;
+  followers: string[];
+  following: string[];
+}
+
+export async function addFollower({ userId, followerId }: IUpdateUserFollowers): Promise<void> {
+  try {
+    // Fetch current user document
+    const currentUserDoc = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    );
+
+    // Fetch target user document
+    const targetUserDoc = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      followerId
+    );
+
+    console.log(currentUserDoc.followers)
+    console.log(targetUserDoc)
+
+    // Update current user's following array
+    const updatedFollowing = currentUserDoc.following || [];
+    if (!updatedFollowing.includes(followerId)) {
+      updatedFollowing.push(followerId);
+    }
+
+    // Update target user's followers array
+    const updatedFollowers = targetUserDoc.followers || [];
+    if (!updatedFollowers.includes(userId)) {
+      updatedFollowers.push(userId);
+    }
+
+    // Update both documents
+    await Promise.all([
+      databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        userId,
+        { following: updatedFollowing }
+      ),
+      databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        followerId,
+        { followers: updatedFollowers }
+      )
+    ]);
+  } catch (error) {
+    console.error("Failed to follow user:", error);
+    throw new Error(`Failed to follow user: ${error}`);
+  }
+}
+
+export async function unfollowUser({ userId, followerId }: IUpdateUserFollowers): Promise<void> {
+  try {
+    // Fetch current user document
+    const currentUserDoc = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    );
+
+    // Fetch target user document
+    const targetUserDoc = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      followerId
+    );
+
+    // Update current user's following array
+    const updatedFollowing: string[] = [];
+    for (const id of currentUserDoc.following) {
+      if (id !== followerId) {
+        updatedFollowing.push(id);
+      }
+    }
+
+    // Update target user's followers array
+    const updatedFollowers: string[] = [];
+    for (const id of targetUserDoc.followers) {
+      if (id !== userId) {
+        updatedFollowers.push(id);
+      }
+    }
+
+    // Update both documents
+    await Promise.all([
+      databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        userId,
+        { following: updatedFollowing }
+      ),
+      databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        followerId,
+        { followers: updatedFollowers }
+      )
+    ]);
+  } catch (error) {
+    console.error("Failed to unfollow user:", error);
+    throw new Error(`Failed to unfollow user: ${error}`);
   }
 }

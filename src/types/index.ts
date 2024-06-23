@@ -11,6 +11,8 @@ export type IUpdateUser = {
   imageId: string;
   imageUrl: URL | string;
   file: File[];
+  followers: string[];
+  following: string[];
 };
 
 export type INewPost = {
@@ -38,6 +40,8 @@ export type IUser = {
   email: string;
   imageUrl: string;
   bio: string;
+  followers: string[]; // Array of user IDs who are following this user
+  following: string[]; // Array of user IDs this user is following
 };
 
 export type INewUser = {
@@ -46,3 +50,10 @@ export type INewUser = {
   username: string;
   password: string;
 };
+
+
+export type IUpdateUserFollowers = {
+  userId: string;
+  followerId: string;
+};
+

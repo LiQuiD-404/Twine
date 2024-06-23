@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { createContext, useContext, useEffect, useState } from "react";
+// AuthContext.tsx
 
+import { createContext, useContext, useEffect, useState } from "react";
 import { IUser } from "@/types";
 import { getCurrentUser } from "@/lib/appwrite/api";
 
@@ -11,6 +11,8 @@ export const INITIAL_USER = {
   email: "",
   imageUrl: "",
   bio: "",
+  followers: [], // Add followers array
+  following: [], // Add following array
 };
 
 const INITIAL_STATE = {
@@ -34,13 +36,12 @@ type IContextType = {
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
   const [user, setUser] = useState<IUser>(INITIAL_USER);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const checkAuthUser = async () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     try {
       const currentAccount = await getCurrentUser();
       if (currentAccount) {
@@ -51,12 +52,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: currentAccount.email,
           imageUrl: currentAccount.imageUrl,
           bio: currentAccount.bio,
+          followers: currentAccount.followers || [], // Set followers array
+          following: currentAccount.following || [], // Set following array
         });
         setIsAuthenticated(true);
-
         return true;
       }
-
       return false;
     } catch (error) {
       console.error(error);
@@ -67,15 +68,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    const cookieFallback = localStorage.getItem("cookieFallback");
-    if (
-      cookieFallback === "[]" ||
-      cookieFallback === null ||
-      cookieFallback === undefined
-    ) {
-      navigate("/sign-in");
-    }
-
     checkAuthUser();
   }, []);
 
