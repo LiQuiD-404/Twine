@@ -1,7 +1,7 @@
-import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, useParams } from "react-router-dom";
+import * as z from 'zod';
 
 import {
   Form,
@@ -32,6 +32,8 @@ const UpdateProfile = () => {
       username: user.username,
       email: user.email,
       bio: user.bio,
+      followers: user.followers, // Assuming these are part of user context
+      following: user.following, // Assuming these are part of user context
     },
   });
 
@@ -47,8 +49,6 @@ const UpdateProfile = () => {
       </div>
     );
 
-  console.log(currentUser.bio);
-
   // Handler
   const handleUpdate = async (value: z.infer<typeof ProfileValidation>) => {
     const updatedUser = await updateUser({
@@ -58,6 +58,8 @@ const UpdateProfile = () => {
       file: value.file,
       imageUrl: currentUser.imageUrl,
       imageId: currentUser.imageId,
+      followers: value.followers, // Pass updated followers if needed
+      following: value.following, // Pass updated following if needed
     });
 
     if (!updatedUser) {
@@ -71,7 +73,10 @@ const UpdateProfile = () => {
       name: updatedUser?.name,
       bio: updatedUser?.bio,
       imageUrl: updatedUser?.imageUrl,
+      followers: updatedUser?.followers, // Update followers in user context
+      following: updatedUser?.following, // Update following in user context
     });
+
     return navigate(`/profile/${id}`);
   };
 
@@ -92,7 +97,8 @@ const UpdateProfile = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleUpdate)}
-            className="flex flex-col gap-7 w-full mt-4 max-w-5xl">
+            className="flex flex-col gap-7 w-full mt-4 max-w-5xl"
+          >
             <FormField
               control={form.control}
               name="file"
@@ -182,13 +188,15 @@ const UpdateProfile = () => {
               <Button
                 type="button"
                 className="shad-button_dark_4"
-                onClick={() => navigate(-1)}>
+                onClick={() => navigate(-1)}
+              >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 className="shad-button_primary whitespace-nowrap"
-                disabled={isLoadingUpdate}>
+                disabled={isLoadingUpdate}
+              >
                 {isLoadingUpdate && <Loader />}
                 Update Profile
               </Button>

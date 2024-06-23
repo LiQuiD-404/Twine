@@ -2,7 +2,7 @@ import { ID, Query } from "appwrite";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
-import { IUpdatePost, INewPost, INewUser, IUpdateUser, IUpdateUserFollowers, IUser } from "@/types";
+import { IUpdatePost, INewPost, INewUser, IUpdateUser, IUpdateUserFollowers } from "@/types";
 
 // ============================================================
 // AUTH
@@ -587,11 +587,6 @@ export async function updateUser(user: IUpdateUser) {
 //   }
 // }
 
-interface IUserDocument {
-  id: string;
-  followers: string[];
-  following: string[];
-}
 
 export async function addFollower({ userId, followerId }: IUpdateUserFollowers): Promise<void> {
   try {
