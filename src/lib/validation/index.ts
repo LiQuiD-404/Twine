@@ -34,4 +34,5 @@ export const PostValidation = z.object({
   file: z.custom<File[]>().refine(files => files.length >= 0, { message: "At least one file is required." }),
   location: z.string().min(1, { message: "Location is required." }).max(1000, { message: "Location must be at most 1000 characters long." }),
   tags: z.string().max(200, { message: "Tags must be at most 200 characters long." }).optional(),
+
 });

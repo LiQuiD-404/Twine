@@ -6,11 +6,13 @@ import { useGetCurrentUser } from "@/lib/react-query/queries";
 const Saved = () => {
   const { data: currentUser } = useGetCurrentUser();
 
+  console.log(currentUser);
+
   const savePosts = currentUser?.save
     .map((savePost: Models.Document) => ({
       ...savePost.post,
       creator: {
-        imageUrl: currentUser.imageUrl,
+        imageUrl: "/assets/icons/arrow.png",
       },
     }))
     .reverse();
