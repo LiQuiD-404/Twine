@@ -1,5 +1,6 @@
 import { ID, Query } from "appwrite";
-
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
 import { IUpdatePost, INewPost, INewUser, IUpdateUser } from "@/types";
 
@@ -32,6 +33,7 @@ export async function createUserAccount(user: INewUser) {
     return newUser;
   } catch (error) {
     console.log(error);
+    toast(`${error}`);
     return error;
   }
 }
@@ -55,6 +57,7 @@ export async function saveUserToDB(user: {
     return newUser;
   } catch (error) {
     console.log(error);
+    toast(`${error}`);
   }
 }
 
@@ -66,6 +69,8 @@ export async function signInAccount(user: { email: string; password: string }) {
     return session;
   } catch (error) {
     console.log(error);
+    toast(`${error}`);
+
   }
 }
 
@@ -110,6 +115,7 @@ export async function signOutAccount() {
     return session;
   } catch (error) {
     console.log(error);
+    toast(`${error}`);
   }
 }
 
