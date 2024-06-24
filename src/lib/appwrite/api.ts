@@ -634,6 +634,7 @@ export async function addFollower({ userId, followerId }: IUpdateUserFollowers):
         { followers: updatedFollowers }
       )
     ]);
+    window.location.reload();
   } catch (error) {
     console.error("Failed to follow user:", error);
     throw new Error(`Failed to follow user: ${error}`);
@@ -687,6 +688,7 @@ export async function unfollowUser({ userId, followerId }: IUpdateUserFollowers)
         { followers: updatedFollowers }
       )
     ]);
+    window.location.reload();
   } catch (error) {
     console.error("Failed to unfollow user:", error);
     throw new Error(`Failed to unfollow user: ${error}`);

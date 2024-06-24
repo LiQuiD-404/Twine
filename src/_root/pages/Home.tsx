@@ -37,7 +37,8 @@ const Home = () => {
           <h2 className="h3-bold md:h2-bold text-left w-full">
             {(() => {
               const hours = new Date().getHours();
-              if (hours > 12) {
+              console.log(hours);
+              if (hours >= 12) {
                 return hours > 17 ? "Good Evening!" : "Good Afternoon!";
               } else {
                 return "Good Morning!";
