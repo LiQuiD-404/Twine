@@ -689,6 +689,8 @@ export async function unfollowUser({ userId, followerId }: IUpdateUserFollowers)
       )
     ]);
     window.location.reload();
+
+
   } catch (error) {
     console.error("Failed to unfollow user:", error);
     throw new Error(`Failed to unfollow user: ${error}`);
