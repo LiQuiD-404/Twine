@@ -108,9 +108,26 @@ const Profile = () => {
 
             <div className="flex gap-8 mt-8 items-center justify-center xl:justify-start flex-wrap z-20">
               <StatBlock value={currentUser.posts.length} label="Posts" />
-              <StatBlock value={currentUser.followers.length} label="Followers" />
-              <StatBlock value={currentUser.following.length} label="Following" />
+
+              {/* Link to followers */}
+              {user.id === currentUser?.$id ? (
+                <Link to={`/user-followers/${currentUser.$id}`}>
+                  <StatBlock value={currentUser.followers.length} label="Followers" />
+                </Link>
+              ) : (
+                <StatBlock value={currentUser.followers.length} label="Followers" />
+              )}
+
+              {/* Link to following */}
+              {user.id === currentUser?.$id ? (
+                <Link to={`/user-following/${currentUser.$id}`}>
+                  <StatBlock value={currentUser.following.length} label="Following" />
+                </Link>
+              ) : (
+                <StatBlock value={currentUser.following.length} label="Following" />
+              )}
             </div>
+
           </div>
 
           <div className="flex justify-center gap-4">
@@ -171,10 +188,13 @@ const Profile = () => {
       )}
 
       <Routes>
-        <Route
-          index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
-        />
+        {currentUser.posts.length > 0 ? (
+          <Route
+            index
+            element={<GridPostList posts={currentUser.posts} showUser={false} />}
+          />
+        ) : ("No posts to show")}
+
         {currentUser.$id === user.id && (
           <Route path="/liked-posts" element={<LikedPosts />} />
         )}
