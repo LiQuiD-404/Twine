@@ -19,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick
+
             rtl={false}
             pauseOnFocusLoss
             draggable

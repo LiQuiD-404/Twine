@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Loader, UserCard } from "@/components/shared";
 import { useUserContext } from "@/context/AuthContext";
 import { getUserById } from "@/lib/appwrite/api";
+import { Button } from '@/components/ui';
 
 const UserFollowers = () => {
     const { user, isLoading: isUserLoading } = useUserContext(); // Access global user state
@@ -50,6 +51,10 @@ const UserFollowers = () => {
                         className="invert-white"
                     />
                     <h2 className="h3-bold md:h2-bold text-left w-full">People who follow you</h2>
+                    <Button type="button"
+                        className="py-3 shad-button_primary px-8 ">
+                        Back
+                    </Button>
                 </div>
                 {followers.length > 0 ? (
                     <ul className="user-grid">
