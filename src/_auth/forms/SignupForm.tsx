@@ -89,12 +89,12 @@ const SignupForm = () => {
           className="flex flex-col gap-5 w-full mt-4">
           <FormField
             control={form.control}
-            name="name"
+            name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="shad-form_label">Name</FormLabel>
+                <FormLabel className="shad-form_label">Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="Shubham" type="text" className="shad-input" {...field} />
+                  <Input placeholder="shubham" type="text" className="shad-input" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -103,12 +103,12 @@ const SignupForm = () => {
 
           <FormField
             control={form.control}
-            name="username"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="shad-form_label">Username</FormLabel>
+                <FormLabel className="shad-form_label">Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="shubham" type="text" className="shad-input" {...field} />
+                  <Input placeholder="Shubham" type="text" className="shad-input" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
