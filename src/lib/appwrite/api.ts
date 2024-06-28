@@ -527,7 +527,7 @@ export async function updateUser(user: IUpdateUser) {
       appwriteConfig.userCollectionId,
       user.userId,
       {
-        name: user.name,
+        username: user.username,
         bio: user.bio,
         imageUrl: image.imageUrl,
         imageId: image.imageId,

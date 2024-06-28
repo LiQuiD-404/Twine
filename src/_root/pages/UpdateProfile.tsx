@@ -39,8 +39,7 @@ const UpdateProfile = () => {
 
   // Queries
   const { data: currentUser } = useGetUserById(id || "");
-  const { mutateAsync: updateUser, isLoading: isLoadingUpdate } =
-    useUpdateUser();
+  const { mutateAsync: updateUser, isLoading: isLoadingUpdate } = useUpdateUser();
 
   if (!currentUser)
     return (
@@ -53,7 +52,7 @@ const UpdateProfile = () => {
   const handleUpdate = async (value: z.infer<typeof ProfileValidation>) => {
     const updatedUser = await updateUser({
       userId: currentUser.$id,
-      name: value.name,
+      username: value.username,
       bio: value.bio ?? "",
       file: value.file,
       imageUrl: currentUser.imageUrl,
@@ -66,18 +65,19 @@ const UpdateProfile = () => {
       toast({
         title: `Update user failed. Please try again.`,
       });
+      return;
     }
 
     setUser({
       ...user,
-      name: updatedUser?.name,
-      bio: updatedUser?.bio,
-      imageUrl: updatedUser?.imageUrl,
-      followers: updatedUser?.followers, // Update followers in user context
-      following: updatedUser?.following, // Update following in user context
+      username: updatedUser.username,
+      bio: updatedUser.bio,
+      imageUrl: updatedUser.imageUrl,
+      followers: updatedUser.followers, // Update followers in user context
+      following: updatedUser.following, // Update following in user context
     });
 
-    return navigate(`/profile/${id}`);
+    navigate(`/profile/${id}`);
   };
 
   return (
@@ -122,7 +122,7 @@ const UpdateProfile = () => {
                 <FormItem>
                   <FormLabel className="shad-form_label">Name</FormLabel>
                   <FormControl>
-                    <Input type="text" className="shad-input" {...field} />
+                    <Input type="text" className="shad-input" {...field} disabled />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +140,6 @@ const UpdateProfile = () => {
                       type="text"
                       className="shad-input"
                       {...field}
-                      disabled
                     />
                   </FormControl>
                   <FormMessage />
