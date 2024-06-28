@@ -3,8 +3,10 @@ import { Loader, UserCard } from "@/components/shared";
 import { useUserContext } from "@/context/AuthContext";
 import { getUserById } from "@/lib/appwrite/api";
 import { Button } from '@/components/ui';
+import { useNavigate } from 'react-router-dom';
 
 const UserFollowers = () => {
+    const navigate = useNavigate();
     const { user, isLoading: isUserLoading } = useUserContext(); // Access global user state
     const [followers, setFollowers] = useState<any[]>([]); // Initialize followers state
     const [isFollowersLoading, setIsFollowersLoading] = useState(true);
@@ -52,7 +54,7 @@ const UserFollowers = () => {
                     />
                     <h2 className="h3-bold md:h2-bold text-left w-full">People who follow you</h2>
                     <Button type="button"
-                        className="py-3 shad-button_primary px-8 ">
+                        className="py-3 shad-button_primary px-8 " onClick={() => navigate(-1)}>
                         Back
                     </Button>
                 </div>

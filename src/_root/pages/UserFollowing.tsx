@@ -3,8 +3,11 @@ import { useState, useEffect } from "react";
 import { Loader, UserCard } from "@/components/shared";
 import { useUserContext } from "@/context/AuthContext";
 import { getUserById } from "@/lib/appwrite/api";
+import { Button } from "@/components/ui";
+import { useNavigate } from "react-router-dom";
 
 const UserFollowing = () => {
+    const navigate = useNavigate();
     const { user, isLoading: isUserLoading } = useUserContext(); // Access global user state
     const [followers, setFollowers] = useState<any[]>([]); // Initialize followers state
     const [isFollowersLoading, setIsFollowersLoading] = useState(true);
@@ -51,6 +54,10 @@ const UserFollowing = () => {
                         className="invert-white"
                     />
                     <h2 className="h3-bold md:h2-bold text-left w-full">People you follow</h2>
+                    <Button type="button"
+                        className="py-3 shad-button_primary px-8 " onClick={() => navigate(-1)}>
+                        Back
+                    </Button>
                 </div>
                 {followers.length > 0 ? (
                     <ul className="user-grid">
